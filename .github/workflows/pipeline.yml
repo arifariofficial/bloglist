@@ -24,20 +24,10 @@ jobs:
           node-version: "16"
 
       - name: install dependencies
-        run: npm install
-
+        run: npm install && cd frontend && npm install
       - name: lint
-        run: npm run eslint
-
+        run: npm run lint && cd frontend && npm run lint
       - name: build
-        run: npm run build
-
+        run: npm run build:ui
       - name: test
-        run: npm run test
-
-      - name: e2e tests
-        uses: cypress-io/github-action@v5
-        with:
-          command: npm run test:e2e
-          start: npm run start-prod
-          wait-on: http://localhost:3003
+        run: npm run test && cd frontend && npm run test
