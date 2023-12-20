@@ -9,7 +9,8 @@
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "start:test": "cross-env NODE_ENV=test node index.js",
     "build:ui": "rm -rf build && cd frontend/ && rm -rf build && npm run build && cp -r build ../ && cd ..",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:e2e": "cypress run"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +18,7 @@
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
+    "cypress": "^13.6.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
