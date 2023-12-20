@@ -5,6 +5,7 @@ import visibleReducer from "./reducers/visibleReducer";
 import usersReducers from "./reducers/usersReducers";
 import loginReducer from "./reducers/loginReducer";
 import commentReducer from "./reducers/commentReducer";
+import tokenReducer from "./reducers/tokenReducer";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     user: loginReducer,
     notification: notificationReducer,
     visible: visibleReducer,
+    token: tokenReducer,
   },
 });
 

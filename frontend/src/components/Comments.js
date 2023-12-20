@@ -8,6 +8,7 @@ const Comments = ({ blog }) => {
   const [blogId, setBlogId] = useState(null);
 
   const comments = useSelector(({ comments }) => comments);
+  const token = useSelector(({ token }) => token);
 
   const dispatch = useDispatch();
 
@@ -16,7 +17,7 @@ const Comments = ({ blog }) => {
     const commentObj = {
       comment: comment,
     };
-    dispatch(handleCommentObj(blogId, commentObj));
+    dispatch(handleCommentObj(blogId, commentObj, token));
   };
   if (!comments) return null;
 

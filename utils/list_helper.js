@@ -1,4 +1,5 @@
 const _ = require("lodash");
+
 const dummy = (blogs) => {
   return 1;
 };
@@ -16,11 +17,13 @@ const favoriteBlog = (blogList) => {
   const result = blogList.find((item) => item.likes === maxLlikes);
   return { title: result.title, author: result.author, likes: result.likes };
 };
+
 const mostBlogs = (listWithManyBlog) => {
   const result = _.countBy(listWithManyBlog, "author");
   const author = _.maxBy(Object.keys(result));
   return { author: author, blogs: result[author] };
 };
+
 const mostLikes = (blogs) => {
   const result = {};
   const author = {
@@ -29,9 +32,7 @@ const mostLikes = (blogs) => {
   };
 
   blogs.forEach((item) => {
-    result[item.author] = result[item.author]
-      ? result[item.author] + item.likes
-      : item.likes;
+    result[item.author] = result[item.author] ? result[item.author] + item.likes : item.likes;
   });
 
   for (const [key, value] of Object.entries(result)) {

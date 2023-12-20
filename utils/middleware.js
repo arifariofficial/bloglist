@@ -10,6 +10,10 @@ const requestLogger = (request, response, next) => {
   next();
 };
 
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message);
 
@@ -29,7 +33,7 @@ const errorHandler = (error, request, response, next) => {
 };
 
 const tokenExtractor = async (request, response, next) => {
-  const authorization = await request.get("authorization");
+  const authorization = await request.get("Authorization");
   if (!authorization) {
     response.status(401);
   }
@@ -53,4 +57,4 @@ const userExtractor = async (request, response, next) => {
   next();
 };
 
-module.exports = { requestLogger, errorHandler, tokenExtractor, userExtractor };
+module.exports = { requestLogger, errorHandler, unknownEndpoint, tokenExtractor, userExtractor };

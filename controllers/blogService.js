@@ -42,12 +42,14 @@ blogRouter.delete("/:id", async (request, response) => {
   }
 
   const user = request.user;
+
   if (blog.user.toString() === user.id.toString()) {
     await Blog.findByIdAndDelete(request.params.id);
-    response.status(200).end();
-  }
-  if (blog.user.toString() !== user.id.toString()) {
+    response.status(204).end();
+  } else if (blog.user.toString() !== user.id.toString()) {
     response.status(405).json({ error: "not allowed" });
+  } else {
+    response.status(400);
   }
 });
 

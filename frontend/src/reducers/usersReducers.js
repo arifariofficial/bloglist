@@ -13,9 +13,9 @@ const usersReducer = createSlice({
 
 export const { setUsers } = usersReducer.actions;
 
-export const initializeUsers = () => {
+export const initializeUsers = (token) => {
   return async (dispatch) => {
-    const users = await userService.getUsers();
+    const users = await userService.getUsers(token);
     dispatch(setUsers(users));
   };
 };

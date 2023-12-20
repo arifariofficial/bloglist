@@ -1,26 +1,21 @@
 import axios from "axios";
 const baseUrl = "http://localhost:3003/api/blogs";
 
-let token = null;
-
-const setToken = (newToken) => {
-  token = `Bearer ${newToken}`;
-};
-
-const getAll = async () => {
+const getAll = async (token) => {
   const config = {
     headers: {
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
   };
+
   const response = await axios.get(baseUrl, config);
   return response.data;
 };
 
-const create = async (newObj) => {
+const create = async (newObj, token) => {
   const config = {
     headers: {
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
   };
 
@@ -28,10 +23,10 @@ const create = async (newObj) => {
   return response.data;
 };
 
-const update = async (id, updateObj) => {
+const update = async (id, updateObj, token) => {
   const config = {
     headers: {
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
   };
 
@@ -39,10 +34,10 @@ const update = async (id, updateObj) => {
   return response.data;
 };
 
-const remove = async (id) => {
+const remove = async (id, token) => {
   const config = {
     headers: {
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
   };
 
@@ -50,4 +45,4 @@ const remove = async (id) => {
   return response.data;
 };
 
-export default { getAll, create, update, remove, setToken };
+export default { getAll, create, update, remove };

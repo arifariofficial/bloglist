@@ -1,16 +1,13 @@
-import { shallowEqual, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Table } from "react-bootstrap";
 
 const Users = () => {
-  const [users, user] = useSelector(
-    (state) => [state.users, state.user],
-    shallowEqual
-  );
+  const users = useSelector(({ users }) => users);
 
   return (
     <div>
-      {user && (
+      {users && (
         <div>
           <h2>Users</h2>
           <h4 style={{ paddingLeft: 150 }}>blogs created</h4>

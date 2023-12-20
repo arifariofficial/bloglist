@@ -9,11 +9,13 @@ const Blog = () => {
   const dispatch = useDispatch();
 
   const blogs = useSelector(({ blogs }) => blogs);
+  const token = useSelector(({ token }) => token);
+
   const id = useParams().id;
   const blog = blogs.find((item) => item.id === id);
 
   useEffect(() => {
-    dispatch(initializeComments(id));
+    dispatch(initializeComments(id, token));
   }, []);
 
   const likes = (id) => {
@@ -22,7 +24,7 @@ const Blog = () => {
       ...likedBlog,
       likes: blog.likes + 1,
     };
-    dispatch(handleLikes(id, updateBlog));
+    dispatch(handleLikes(id, updateBlog, token));
   };
 
   return (
@@ -35,8 +37,7 @@ const Blog = () => {
           <div>
             <p>{blog.url}</p>
             <p>
-              {blog.likes} likes{" "}
-              <button onClick={() => likes(blog.id)}>like</button>
+              {blog.likes} likes <button onClick={() => likes(blog.id)}>like</button>
             </p>
             <p>added by {blog.user.name}</p>
           </div>

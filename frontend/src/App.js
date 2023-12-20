@@ -3,15 +3,14 @@ import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./reducers/loginReducer";
-import blogService from "./services/blogs";
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import Blogs from "./components/Blogs";
 import Users from "./components/Users";
 import User from "./components/User";
 import Blog from "./components/Blog";
-import commentService from "./services/commentService";
 import { initializeBlog } from "./reducers/blogReducer";
 import { initializeUsers } from "./reducers/usersReducers";
+import { setToken } from "./reducers/tokenReducer";
 
 const Login = () => {
   return (
@@ -32,17 +31,13 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       dispatch(setUser(user));
-      blogService.setToken(user.token);
-      commentService.setToken(user.token);
+      dispatch(setToken(user.token));
+      dispatch(initializeBlog(user.token));
+      dispatch(initializeUsers(user.token));
     }
   }, []);
 
   const user = useSelector(({ user }) => user);
-
-  useEffect(() => {
-    dispatch(initializeBlog());
-    dispatch(initializeUsers());
-  }, [user]);
 
   const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogUser");

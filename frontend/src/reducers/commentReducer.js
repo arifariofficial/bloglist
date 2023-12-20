@@ -17,16 +17,16 @@ const commentReducer = createSlice({
 
 export const { setComments, appendComment } = commentReducer.actions;
 
-export const initializeComments = (id) => {
+export const initializeComments = (id, token) => {
   return async (dispatch) => {
-    const returnedObj = await commentService.getAll(id);
+    const returnedObj = await commentService.getAll(id, token);
     dispatch(setComments(returnedObj));
   };
 };
 
-export const handleCommentObj = (id, comment) => {
+export const handleCommentObj = (id, comment, token) => {
   return async (dispatch) => {
-    const returnedObj = await commentService.createComment(id, comment);
+    const returnedObj = await commentService.createComment(id, comment, token);
     dispatch(appendComment(returnedObj));
   };
 };

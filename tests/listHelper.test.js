@@ -68,6 +68,7 @@ test("dummy returns one", () => {
   const result = listHelper.dummy(blogs);
   expect(result).toBe(1);
 });
+
 describe("total likes", () => {
   test("of a empty list is zero", () => {
     const result = listHelper.totalLikes(blogs);
@@ -92,6 +93,7 @@ describe("amount", () => {
       likes: 12,
     });
   });
+
   test("author has the most blogs", () => {
     const result = listHelper.mostBlogs(listWithManyBlog);
     expect(result).toEqual({
@@ -99,6 +101,7 @@ describe("amount", () => {
       blogs: 3,
     });
   });
+
   test("author has the most likes across blogs", () => {
     const result = listHelper.mostLikes(listWithManyBlog);
     expect(result).toEqual({

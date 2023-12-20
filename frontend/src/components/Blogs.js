@@ -5,10 +5,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import { Table } from "react-bootstrap";
 
 const Blogs = () => {
-  const [user, blogs] = useSelector(
-    (state) => [state.user, state.blogs],
-    shallowEqual
-  );
+  const [user, blogs] = useSelector((state) => [state.user, state.blogs], shallowEqual);
 
   const blogStyle = {
     paddingTop: 10,

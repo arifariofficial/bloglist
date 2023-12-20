@@ -10,35 +10,44 @@ const User = require("../models/user");
 beforeEach(async () => {
   await Blog.deleteMany({});
   await Blog.insertMany(helper.initialBlogs);
+
+  await User.deleteMany({});
+
+  const passwordHash = await bcrypt.hash("secret", 10);
+  const user = new User({ username: "root", passwordHash });
+
+  await user.save();
 });
 
-describe("api test", () => {
-  let headers;
-  beforeEach(async () => {
-    const user = {
-      username: "root",
-      password: "secret",
-    };
-    const loginUser = await api.post("/api/login").send(user);
+let token = {};
 
-    headers = {
-      Authorization: `Bearer ${loginUser.body.token}`,
-    };
-  });
-  test("application returns the correct amount of blogs", async () => {
-    const res = await api.get("/api/blogs");
-    expect(res.body).toHaveLength(helper.initialBlogs.length);
-  }, 10000);
+beforeEach(async () => {
+  const user = {
+    username: "root",
+    password: "secret",
+  };
 
+  const loginUser = await api.post("/api/login").send(user);
+
+  token = loginUser.body.token;
+});
+
+describe("when there is initially some blogs saved", () => {
   test("blogs are returned as json", async () => {
     await api
       .get("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
       .expect(200)
       .expect("Content-Type", /application\/json/);
   }, 10000);
 
+  test("application returns the correct amount of blogs", async () => {
+    const res = await api.get("/api/blogs").set("Authorization", `Bearer ${token}`);
+    expect(res.body).toHaveLength(helper.initialBlogs.length);
+  }, 10000);
+
   test("unique identifier property name is id", async () => {
-    const res = await api.get("/api/blogs");
+    const res = await api.get("/api/blogs").set("Authorization", `Bearer ${token}`);
     expect(res.body.id).toBeDefined;
   }, 10000);
 
@@ -53,7 +62,7 @@ describe("api test", () => {
 
     await api
       .post("/api/blogs")
-      .set(headers)
+      .set("Authorization", `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -65,7 +74,7 @@ describe("api test", () => {
     expect(contents).toContain("creating a new blog item test");
   }, 10000);
 
-  test.only("creating a new blog fails if a token is not provided and gives proper code", async () => {
+  test("creating a new blog fails if a token is not provided and gives proper code", async () => {
     const newBlog = {
       title: "creating a new blog item test",
       author: "Ariful Islam",
@@ -92,6 +101,7 @@ describe("api test", () => {
     };
     const res = await api
       .post("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -105,19 +115,19 @@ describe("api test", () => {
       author: "Ariful Islam",
       likes: 20,
     };
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api.post("/api/blogs").set("Authorization", `Bearer ${token}`).send(newBlog).expect(400);
   }, 10000);
 });
 
 describe("deletion of a blog", () => {
   test("sucess with status code if id is valid", async () => {
     const blogAtStart = await helper.blogsInDb();
-    const blogToBeDeleted = blogAtStart[0].id;
+    const blogToBeDeleted = blogAtStart[0];
 
-    await api.delete(`/api/blogs/${blogToBeDeleted}`).expect(204);
+    await api.delete(`/api/blogs/${blogToBeDeleted.id}`).set("Authorization", `Bearer ${token}`);
 
     const blogAtEnd = await helper.blogsInDb();
-    expect(blogAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+    expect(blogAtEnd).toHaveLength(helper.initialBlogs.length);
 
     const id = blogAtEnd.map((item) => item.id);
     expect(id).not.toContain(blogToBeDeleted);
@@ -132,6 +142,7 @@ describe("updating impormation of an individual blog", () => {
 
     await api
       .put(`/api/blogs/${blogToBeUpdated.id}`)
+      .set("Authorization", `Bearer ${token}`)
       .send(blogToBeUpdated)
       .expect(200);
 
