@@ -13,6 +13,7 @@ const mongoose = require("mongoose");
 const logger = require("./utils/logger");
 const config = require("./utils/config.js");
 const middleware = require("./utils/middleware");
+const { send } = require("process");
 app.use(cors());
 
 logger.info("connecting to", config.MONGODB_URI);
@@ -33,6 +34,13 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 
 app.use(express.static("build"));
+
+app.get("/health", (req, res) => {
+  send("ok");
+});
+app.get("/version", (req, res) => {
+  res.send("1"); // change this string to ensure a new version deployed
+});
 
 const indexPath = path.join(__dirname, "build", "index.html");
 
