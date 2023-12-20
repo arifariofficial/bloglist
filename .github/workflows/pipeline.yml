@@ -32,3 +32,10 @@ jobs:
 
       - name: build
         run: npm run build:ui
+      - name: Create env file
+        run: |
+          touch .env
+          echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
+          cat .env
+      - name: Build
+        run: npm run build:ui
