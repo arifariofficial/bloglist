@@ -36,7 +36,7 @@ app.use(middleware.requestLogger);
 app.use(express.static("build"));
 
 app.get("/health", (req, res) => {
-  send("ok");
+  res.send("ok");
 });
 app.get("/version", (req, res) => {
   res.send("1"); // change this string to ensure a new version deployed
