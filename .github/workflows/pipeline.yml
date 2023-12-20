@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
       PORT: ${{ secrets.PORT }}
       SECRET: ${{ secrets.SECRET }}
     steps:
@@ -32,8 +31,7 @@ jobs:
 
       - name: build
         run: npm run build:ui
-      - name: Build
-        run: npm run build:ui
+
       - name: e2e tests
         uses: cypress-io/github-action@v5
         with:
