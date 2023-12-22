@@ -1,12 +1,9 @@
 const testingService = require("express").Router();
-const { Mongoose } = require("mongoose");
-const { connect } = require("../app");
 const Blog = require("../models/blog");
 const User = require("../models/user");
 
 testingService.post("/reset", async (request, response) => {
   try {
-    await Mongoose.connect();
     await Blog.deleteMany({});
     await User.deleteMany({});
 
