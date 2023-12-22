@@ -86,8 +86,8 @@ describe("Blog app", function () {
         cy.contains("remove").should("not.exist");
       });
     });
-    describe("blogs are ordered according to likes", function () {
-      beforeEach(function () {
+    describe.only("blogs are ordered according to likes", async function () {
+      beforeEach(async function () {
         cy.get("#new-blog-button").click();
         cy.get("#title").type("blog with like 2");
         cy.get("#author").type("Ariful Islam");
@@ -123,7 +123,7 @@ describe("Blog app", function () {
         cy.get("#like").as("button3");
       });
 
-      it("blogs are sorted", function () {
+      it("blogs are sorted", async function () {
         cy.contains("blogs").click();
         cy.get("@blog1").click();
         cy.get("@button1").click();
