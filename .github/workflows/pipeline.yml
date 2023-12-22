@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
       PORT: ${{ secrets.PORT }}
       SECRET: ${{ secrets.SECRET }}
     steps:
@@ -28,6 +29,6 @@ jobs:
       - name: e2e frontend test
         uses: cypress-io/github-action@v5
         with:
-          command: npm run test:e2e:frontend
+          command: npm run test:cypress
           start: npm run start:test
           wait-on: http://localhost:3003
