@@ -4,7 +4,7 @@ const User = require("../models/user");
 
 testingService.post("/reset", async (request, response) => {
   try {
-    await connectedDB();
+    await connectDB();
     await Blog.deleteMany({});
     await User.deleteMany({});
 
