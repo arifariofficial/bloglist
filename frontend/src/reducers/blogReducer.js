@@ -9,7 +9,7 @@ const blogSlice = createSlice({
       return action.payload;
     },
     appendBlog(state, action) {
-      return state.push(action.payload);
+      return state.concat(action.payload);
     },
     updateBlog(state, action) {
       const updatedObj = action.payload;
@@ -26,8 +26,14 @@ export const { setBlogs, appendBlog, updateBlog, deleteBlog } = blogSlice.action
 
 export const initializeBlog = (token) => {
   return async (dispatch) => {
-    const returnedObj = await blogsService.getAll(token);
-    dispatch(setBlogs(returnedObj));
+    try {
+      const returnedObj = await blogsService.getAll(token);
+      dispatch(setBlogs(returnedObj));
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data);
+      }
+    }
   };
 };
 

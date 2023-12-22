@@ -7,7 +7,15 @@ module.exports = defineConfig({
     },
     baseUrl: "http://localhost:3000",
   },
+
   env: {
-    BACKEND: "http://localhost:3003/api",
+    BACKEND: "http://localhost:3003/",
+  },
+
+  component: {
+    devServer: {
+      framework: "create-react-app",
+      bundler: "webpack",
+    },
   },
 });

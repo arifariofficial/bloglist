@@ -8,6 +8,7 @@ describe("Blog app", function () {
       password: "secret",
     };
     cy.request("POST", "http://localhost:3003/api/users", user);
+
     const user2 = {
       username: "ariful",
       name: "Ariful Islam",
@@ -54,6 +55,7 @@ describe("Blog app", function () {
       cy.get("#create-button").click();
       cy.contains("A blog created by cypress");
     });
+
     describe("when there is blog", function () {
       beforeEach(function () {
         cy.contains("new blog").click();
@@ -87,12 +89,6 @@ describe("Blog app", function () {
     describe.only("blogs are ordered according to likes", function () {
       beforeEach(function () {
         cy.get("#new-blog-button").click();
-        cy.get("#title").type("blog with like 1");
-        cy.get("#author").type("Ariful Islam");
-        cy.get("#url").type("www.yahoo.com");
-        cy.get("#create-button").click();
-
-        cy.get("#new-blog-button").click();
         cy.get("#title").type("blog with like 2");
         cy.get("#author").type("Ariful Islam");
         cy.get("#url").type("www.yahoo.com");
@@ -104,51 +100,63 @@ describe("Blog app", function () {
         cy.get("#url").type("www.yahoo.com");
         cy.get("#create-button").click();
 
-        cy.contains("blog with like 1")
-          .find("button")
-          .should("contain", "view")
-          .click();
-        cy.contains("blog with like 1")
-          .parent()
-          .find("button#like")
-          .as("button1");
+        cy.get("#new-blog-button").click();
+        cy.get("#title").type("blog with like 4");
+        cy.get("#author").type("Ariful Islam");
+        cy.get("#url").type("www.yahoo.com");
+        cy.get("#create-button").click();
 
-        cy.contains("blog with like 2")
-          .find("button")
-          .should("contain", "view")
-          .click();
-        cy.contains("blog with like 2")
-          .parent()
-          .find("button#like")
-          .as("button2");
+        cy.contains("blog with like 2").as("blog1").click();
+        cy.contains("blog with like 2").parent();
+        cy.get("#like").as("button1");
+        cy.wait(1000);
 
-        cy.contains("blog with like 3")
-          .find("button")
-          .should("contain", "view")
-          .click();
-        cy.contains("blog with like 3")
-          .parent()
-          .find("button#like")
-          .as("button3");
+        cy.contains("blogs").click();
+        cy.contains("blog with like 3").as("blog2").click();
+        cy.contains("blog with like 3").parent();
+        cy.get("#like").as("button2");
+        cy.wait(2000);
+
+        cy.contains("blogs").click();
+        cy.contains("blog with like 4").as("blog3").click();
+        cy.contains("blog with like 4").parent();
+        cy.get("#like").as("button3");
       });
+
       it("blogs are sorted", function () {
+        cy.contains("blogs").click();
+        cy.get("@blog1").click();
         cy.get("@button1").click();
+        cy.wait(300);
+        cy.get("@button1").click();
+        cy.wait(300);
 
+        cy.contains("blogs").click();
+        cy.get("@blog2").click();
         cy.get("@button2").click();
         cy.wait(300);
         cy.get("@button2").click();
-
-        cy.get("@button3").click();
         cy.wait(300);
-        cy.get("@button3").click();
-        cy.wait(300);
-        cy.get("@button3").click();
+        cy.get("@button2").click();
         cy.wait(300);
 
-        cy.get("div").then((blogs) => {
-          expect(blogs[0]).to.contain.text("blog with like 1");
-          expect(blogs[1]).to.contain.text("blog with like 2");
-          expect(blogs[2]).to.contain.text("blog with like 3");
+        cy.contains("blogs").click();
+        cy.get("@blog3").click();
+        cy.get("@button3").click();
+        cy.wait(300);
+        cy.get("@button3").click();
+        cy.wait(300);
+        cy.get("@button3").click();
+        cy.wait(300);
+        cy.get("@button3").click();
+        cy.wait(300);
+
+        cy.contains("blogs").click();
+
+        cy.get("#blog").then((blogs) => {
+          cy.wrap(blogs[0]).contains("4");
+          cy.wrap(blogs[1]).contains("3");
+          cy.wrap(blogs[2]).contains("2");
         });
       });
     });

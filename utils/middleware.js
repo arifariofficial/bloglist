@@ -34,6 +34,7 @@ const errorHandler = (error, request, response, next) => {
 
 const tokenExtractor = async (request, response, next) => {
   const authorization = await request.get("Authorization");
+
   if (!authorization) {
     response.status(401);
   }

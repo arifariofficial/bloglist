@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { createNewBlog } from "../reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { setVisible } from "../reducers/visibleReducer";
@@ -8,6 +8,7 @@ const BlogForm = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const token = useSelector(({ token }) => token);
 
   const dispatch = useDispatch();
   const user = useSelector(({ user }) => user);
@@ -24,7 +25,8 @@ const BlogForm = () => {
           url: url,
           likes: 0,
         },
-        user
+        user,
+        token
       )
     );
     dispatch(setVisible(!visible));

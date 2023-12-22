@@ -18,7 +18,7 @@ const Blogs = () => {
   const copyOfBlogs = [...blogs];
 
   return (
-    <div>
+    <div id="blog">
       {user && (
         <div>
           {<Toggleable buttonLabel="create new">{<BlogForm />}</Toggleable>}

@@ -23,6 +23,7 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
 Cypress.Commands.add("login", ({ username, password }) => {
   cy.request("POST", "http://localhost:3003/api/login", {
     username,
@@ -39,9 +40,7 @@ Cypress.Commands.add("createBlog", ({ title, author, url }) => {
     method: "POST",
     body: { title, author, url },
     headers: {
-      Authorization: `bearer ${
-        JSON.parse(localStorage.getItem("loggedBlogappUser")).token
-      }`,
+      Authorization: `bearer ${JSON.parse(localStorage.getItem("loggedBlogappUser")).token}`,
     },
   });
 

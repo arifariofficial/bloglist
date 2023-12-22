@@ -26,8 +26,10 @@ jobs:
         run: npm install && cd frontend && npm install
       - name: lint
         run: npm run lint && cd frontend && npm run lint
-      - name: test
+      - name: test backend
         run: npm run test
+      - name: test frontend
+        run: cd frontend && npm run test
 
       - name: build
         run: npm run build:ui
@@ -35,9 +37,10 @@ jobs:
       - name: e2e tests
         uses: cypress-io/github-action@v5
         with:
-          command: npm run test:e2e
-          start: npm run start-prod
+          command: cd frontend npm run test:e2e
+          start: npm start && cd .. npm run start:test
           wait-on: http://localhost:3003
+
       - name: deploy to heroku
         if: ${{github.event_name == 'push'}}
         uses: akhileshns/heroku-deploy@v3.12.14

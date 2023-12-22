@@ -16,6 +16,11 @@ const middleware = require("./utils/middleware");
 const { send } = require("process");
 app.use(cors());
 
+if (process.env.NODE_ENV === "test") {
+  const testingRouter = require("./controllers/testingService");
+  app.use("/api/testing", testingRouter);
+}
+
 logger.info("connecting to", config.MONGODB_URI);
 
 mongoose.set("strictQuery", false);
@@ -47,20 +52,16 @@ const indexPath = path.join(__dirname, "build", "index.html");
 app.get("/users", (req, res) => res.sendFile(indexPath));
 app.get("/users/:id", (req, res) => res.sendFile(indexPath));
 app.get("/blogs/:id", (req, res) => res.sendFile(indexPath));
+app.get("/login", (req, res) => res.sendFile(indexPath));
 
-app.use("/api/users", userRouter);
 app.use("/api/login", loginRouter);
+app.use("/api/users", userRouter);
 
 app.use(middleware.tokenExtractor);
 app.use(middleware.userExtractor);
 
 app.use("/api/blogs", blogRouter);
 app.use("/api/blogs", commentRouter);
-
-if (process.env.NODE_ENV === "test") {
-  const testingRouter = require("./controllers/testingService");
-  app.use("/api/testing", testingRouter);
-}
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

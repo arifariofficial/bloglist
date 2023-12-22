@@ -35,7 +35,7 @@ const App = () => {
       dispatch(initializeBlog(user.token));
       dispatch(initializeUsers(user.token));
     }
-  }, []);
+  }, [dispatch]);
 
   const user = useSelector(({ user }) => user);
 

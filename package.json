@@ -38,6 +38,9 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "globalTeardown": "./tests/teardown.js"
+    "globalTeardown": "./tests/teardown.js",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/frontend/"
+    ]
   }
 }
