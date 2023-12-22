@@ -1,5 +1,5 @@
 describe("Blog app", function () {
-  beforeEach(async function () {
+  beforeEach(function () {
     cy.request("POST", "http://localhost:3003/api/testing/reset");
 
     const user = {
@@ -15,15 +15,16 @@ describe("Blog app", function () {
       password: "secret",
     };
     cy.request("POST", "http://localhost:3003/api/users", user2);
+
     cy.visit("http://localhost:3003");
-  }, 10000);
+  });
 
   it("Login form is shown", function () {
     cy.contains("log in to application");
     cy.contains("login");
   });
 
-  describe("Login", function () {
+  describe.only("Login", function () {
     it("success with current credentials", function () {
       cy.get("#username").type("root");
       cy.get("#password").type("secret");
@@ -86,7 +87,7 @@ describe("Blog app", function () {
         cy.contains("remove").should("not.exist");
       });
     });
-    describe.only("blogs are ordered according to likes", async function () {
+    describe("blogs are ordered according to likes", async function () {
       beforeEach(async function () {
         cy.get("#new-blog-button").click();
         cy.get("#title").type("blog with like 2");
