@@ -24,7 +24,7 @@ jobs:
           node-version: "16"
 
       - name: install dependencies backend
-        run: npm install &&
+        run: npm install
       - name: install dependencies frontend
         run: cd frontend && npm install
 
