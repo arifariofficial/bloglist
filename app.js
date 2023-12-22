@@ -16,6 +16,11 @@ const middleware = require("./utils/middleware");
 const { send } = require("process");
 app.use(cors());
 
+if (process.env.NODE_ENV === "test") {
+  const testingRouter = require("./controllers/testingService");
+  app.use("/api/testing", testingRouter);
+}
+
 logger.info("connecting to", config.MONGODB_URI);
 
 mongoose.set("strictQuery", false);
@@ -23,16 +28,13 @@ mongoose.set("strictQuery", false);
 mongoose
   .connect(config.MONGODB_URI)
   .then(() => {
+    console.log("connected to mongoDb");
     logger.info("conncted to MongoDB");
   })
   .catch((error) => {
+    console.log("not conected ", error.message);
     logger.error("error connecting to MongoDB:", error.message);
   });
-
-if (process.env.NODE_ENV === "test") {
-  const testingRouter = require("./controllers/testingService");
-  app.use("/api/testing", testingRouter);
-}
 
 app.use(express.json());
 

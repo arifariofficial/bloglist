@@ -9,7 +9,7 @@ testingService.post("/reset", async (request, response) => {
 
     response.status(204).end();
   } catch (error) {
-    console.log("mongoDb: ", error);
+    console.log("mongoDb: ", error.message);
   }
 });
 
