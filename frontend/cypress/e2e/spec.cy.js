@@ -15,7 +15,7 @@ describe("Blog app", function () {
       password: "secret",
     };
     cy.request("POST", "http://localhost:3003/api/users", user2);
-    cy.visit("http://localhost:3000");
+    cy.visit("http://localhost:3003");
   });
 
   it("Login form is shown", function () {
