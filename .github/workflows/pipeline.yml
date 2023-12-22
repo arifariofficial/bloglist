@@ -28,6 +28,9 @@ jobs:
       - name: install dependencies frontend
         run: cd frontend && npm install
 
+      - name: build
+        run: npm run build:ui
+
       - name: e2e frontend test
         uses: cypress-io/github-action@v5
         with:
