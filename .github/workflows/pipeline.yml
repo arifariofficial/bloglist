@@ -23,8 +23,10 @@ jobs:
         with:
           node-version: "16"
 
-      - name: install dependencies
-        run: npm install && cd frontend && npm install
+      - name: install dependencies backend
+        run: npm install &&
+      - name: install dependencies frontend
+        run: cd frontend && npm install
 
       - name: e2e frontend test
         uses: cypress-io/github-action@v5
