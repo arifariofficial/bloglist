@@ -37,8 +37,8 @@ jobs:
       - name: e2e tests
         uses: cypress-io/github-action@v5
         with:
-          command: cd frontend npm run test:e2e
           start: npm start && cd .. npm run start:test
+          command: cd frontend npm run test:e2e
           wait-on: http://localhost:3003
 
       - name: deploy to heroku
