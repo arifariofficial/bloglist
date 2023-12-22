@@ -3,10 +3,14 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 
 testingService.post("/reset", async (request, response) => {
-  await Blog.deleteMany({});
-  await User.deleteMany({});
+  try {
+    await Blog.deleteMany({});
+    await User.deleteMany({});
 
-  response.status(204).end();
+    response.status(204).end();
+  } catch (error) {
+    console.log("mongoDb: ", error.message);
+  }
 });
 
 module.exports = testingService;

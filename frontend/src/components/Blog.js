@@ -16,9 +16,9 @@ const Blog = () => {
 
   useEffect(() => {
     dispatch(initializeComments(id, token));
-  }, []);
+  }, [dispatch, id, token]);
 
-  const likes = (id) => {
+  const onClickLikes = (id) => {
     const likedBlog = blogs.find((item) => item.id === id);
     const updateBlog = {
       ...likedBlog,
@@ -37,7 +37,10 @@ const Blog = () => {
           <div>
             <p>{blog.url}</p>
             <p>
-              {blog.likes} likes <button onClick={() => likes(blog.id)}>like</button>
+              {blog.likes} likes{" "}
+              <button onClick={() => onClickLikes(blog.id)} id="like" className="active">
+                like
+              </button>
             </p>
             <p>added by {blog.user.name}</p>
           </div>

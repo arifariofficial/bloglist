@@ -25,17 +25,66 @@ jobs:
 
       - name: install dependencies
         run: npm install && cd frontend && npm install
+
       - name: lint
         run: npm run lint && cd frontend && npm run lint
+
       - name: test
-        run: npm run test
+        run: npm run test && cd frontend && npm run test
 
       - name: build
         run: npm run build:ui
-      - name: Create env file
-        run: |
-          touch .env
-          echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
-          cat .env
-      - name: Build
-        run: npm run build:ui
+
+      - name: e2e frontend test
+        uses: cypress-io/github-action@v5
+        with:
+          command: npm run test:cypress
+          start: npm run start:test
+          wait-on: http://localhost:3003
+
+      - name: deploy to heroku
+        if: ${{github.event_name == 'push'}}
+        uses: akhileshns/heroku-deploy@v3.12.14
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "bloglist-ci-cd"
+          heroku_email: "ariful6@yahoo.com"
+          healthcheck: "https://bloglist-ci-cd-7787c8c53197.herokuapp.com/health"
+          checkstring: "ok"
+          rollbackonhealthcheckfailed: true
+
+      - name: Deployment Success
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ success() }}
+        env:
+          LAST_COMMIT_AUTHOR: ${{toJson(github.event.head_commit.author.username)}}
+        with:
+          severity: info
+          description: A new version of bloglist deployed
+          details: to https://full-stack-open-pokedex-ariful-694d15d9d278.herokuapp.com/ by ${{fromJson(env.LAST_COMMIT_AUTHOR)}}
+
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Build Failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ failure() }}
+        env:
+          LAST_COMMIT_URL: ${{toJson(github.event.head_commit.url)}}
+          LAST_COMMIT_AUTHOR: ${{toJson(github.event.head_commit.author.username)}}
+        with:
+          severity: error
+          description: build failed
+          details: commit ${{fromJson(env.LAST_COMMIT_URL)}} by ${{fromJson(env.LAST_COMMIT_AUTHOR)}} broke the build :(
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+  tag_realease:
+    if: ${{github.event_name == 'push' && !contains(join(toJson(github.event.commits.message)), 'skip')}}
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@8c8163ef62cf9c4677c8e800f36270af27930f42
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          WITH_V: true

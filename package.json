@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node index.js",
+    "start-prod": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=developement nodemon index.js",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "start:test": "cross-env NODE_ENV=test node index.js",
     "build:ui": "rm -rf build && cd frontend/ && rm -rf build && npm run build && cp -r build ../ && cd ..",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:cypress": "cd frontend/ && npm run test:e2e"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +18,7 @@
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
+    "cypress": "^13.6.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
@@ -36,6 +38,10 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "globalTeardown": "./tests/teardown.js"
+    "globalTeardown": "./tests/teardown.js",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/frontend/",
+      "<rootDir>/node_modules/"
+    ]
   }
 }
