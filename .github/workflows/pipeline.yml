@@ -61,7 +61,7 @@ jobs:
         with:
           severity: info
           description: A new version of bloglist deployed
-          details: to https://full-stack-open-pokedex-ariful-694d15d9d278.herokuapp.com/ by ${{fromJson(env.LAST_COMMIT_AUTHOR)}}
+          details: to https://bloglist-ci-cd-7787c8c53197.herokuapp.com// by ${{fromJson(env.LAST_COMMIT_AUTHOR)}}
 
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
