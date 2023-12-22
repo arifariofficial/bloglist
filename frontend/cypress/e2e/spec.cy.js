@@ -1,5 +1,5 @@
 describe("Blog app", function () {
-  beforeEach(function () {
+  beforeEach(async function () {
     cy.request("POST", "http://localhost:3003/api/testing/reset");
 
     const user = {
@@ -86,7 +86,7 @@ describe("Blog app", function () {
         cy.contains("remove").should("not.exist");
       });
     });
-    describe.only("blogs are ordered according to likes", function () {
+    describe("blogs are ordered according to likes", function () {
       beforeEach(function () {
         cy.get("#new-blog-button").click();
         cy.get("#title").type("blog with like 2");
